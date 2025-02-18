@@ -6,7 +6,7 @@ const skillImageMap = {
   // Skills ohne Eintrag erhalten "Zertifikat ist in progress"
 };
 
-document.addEventListener("DOMContentLoaded", function () 
+document.addEventListener("DOMContentLoaded", function () {
   const skillElements = document.querySelectorAll(".skill");
   const modal = document.getElementById("cert-modal");
   const modalImg = document.getElementById("cert-image");
