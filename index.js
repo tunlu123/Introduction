@@ -1,12 +1,12 @@
 // Hier kannst du pro Skill einen Bildpfad hinterlegen,
 // z.B. 'linux': 'certificates/linux_cert.jpg'
 const skillImageMap = {
-  linux_Bash: "certificates/certificates/linux_bash_cert.jpg",
+  linux_Bash: "certificates/linux_bash_cert.jpg",
   // Weitere Zuordnungen möglich ...
   // Skills ohne Eintrag erhalten "Zertifikat ist in progress"
 };
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () 
   const skillElements = document.querySelectorAll(".skill");
   const modal = document.getElementById("cert-modal");
   const modalImg = document.getElementById("cert-image");
