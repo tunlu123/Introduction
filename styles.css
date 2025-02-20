@@ -96,21 +96,16 @@ p {
   transform: scale(1.1);
 }
 
-/* Modales Fenster für Zertifikat */
+/* Modales Fenster */
 .modal {
-  display: none;
+  display: none; /* Standard: ausgeblendet */
   position: fixed;
-  z-index: 1000;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: auto; /* Falls das Bild zu groß ist, ermöglicht Scrollen */
-  padding: 20px;
+  z-index: 1000; /* Vor dem Rest der Seite */
+  padding-top: 100px;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.8); /* Dunkler Overlay-Hintergrund */
 }
 
 /* Zertifikat mittig anzeigen, ohne abgeschnitten zu werden */
