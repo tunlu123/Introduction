@@ -1,0 +1,64 @@
+pipeline {
+    agent any
+
+    parameters {
+        choice(name: 'ENV', choices: ['DEV', 'STAGING', 'PROD'], description: 'Auswahl der Umgebung')
+        string(name: 'MESSAGE', defaultValue: 'Kein Kommentar zum Deployment angegeben.', description: 'Gib eine Nachricht für das Deployment an')
+    }
+
+    stages {
+        stage('clean up workspace') {
+            steps {
+                sh 'rm -rf ./*'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'echo \'{"env": "staging"}\' > config.json'
+                sh 'echo "Dies ist eine Jenkins-Pipeline" > readme.txt'
+                sh 'echo "Deployment für: ${params.ENV}" > deploy-info.txt' //Aufgabe 7
+                sh 'touch build.txt'
+                sh 'echo "Build erfolgreich gestartet" > log.txt' //Aufgabe 8
+                stash includes: 'build.txt, config.json, readme.txt, deploy-info.txt, log.txt', name: 'buildlog' //Nutze stash, um beide Dateien zu speichern. 
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                script {
+                    if (params.ENV == 'PROD' && !currentBuild.rawBuild.getCause(hudson.model.Cause$UserIdCause)) {
+                        echo 'Achtung! Deployment auf PROD darf nur manuell erfolgen!'
+                        error('Abbruch: Automatische Deployments für PROD sind nicht erlaubt.')
+                    }
+                    echo "Deployment in ${params.ENV} läuft"
+                    echo "Nachricht des Nutzers: ${params.MESSAGE}"
+                    unstash 'buildlog'
+                    sh 'cat config.json' //In der Deploy-Stage soll nur config.json wiederhergestellt und ihr Inhalt angezeigt werden.
+                    sh 'cat deploy-info.txt' //Aufgabe 7
+                    sh 'cat log.txt' //Aufgabe 8
+                }
+            }
+            post {
+                success {
+                    echo 'Deployment erfolgreich'
+                }
+                failure {
+                    unstash 'buildlog'
+                    sh 'cat log.txt'
+                    sh echo "Fehler im Deployment!"
+                    }
+                }
+                always {
+                    echo 'Pipeline abgeschlossen'
+                }
+            }
+        }
+        stage('Documentation') {
+            steps {
+                unstash 'buildlog'
+                sh 'cat readme.txt' //In einer neuen Stage Documentation soll readme.txt wiederhergestellt und ihr Inhalt ausgegeben werden
+            }
+        }
+    }
+}
